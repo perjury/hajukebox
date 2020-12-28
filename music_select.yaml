@@ -1,0 +1,53 @@
+type: 'custom:button-card'
+template: container
+color: '#EDE7B0'
+name: Music Selection
+custom_fields:
+  buttons:
+    card:
+      type: grid
+      columns: 3
+      square: false
+      cards:
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: Adele - shuffle
+            jb_stream_logo: /local/images/adele.jpg
+            jb_stream: '{ "library_name": "Music", "artist_name": "Adele", "shuffle": "1"}'
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: Recently Added - Shuffle
+            jb_stream_logo: /local/images/playlist2.png
+            jb_stream: '{ "playlist_name": "Recently Added", "shuffle": "1" }'
+            media_content_type: playlist
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: Autumnal PL - Shuffle
+            jb_stream_logo: /local/images/playlist2.png
+            jb_stream: '{ "playlist_name": "Autumnal", "shuffle": "1" }'
+            media_content_type: playlist
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: Phil's Playlist
+            jb_stream_logo: /local/images/playlist2.png
+            jb_stream: '{ "playlist_name": "Phils playlist", "shuffle": "1" }'
+            media_content_type: playlist
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: New Age PL
+            jb_stream_logo: /local/images/playlist2.png
+            jb_stream: '{ "playlist_name": "new age", "shuffle": "1" }'
+            media_content_type: playlist
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: Gayle's PL - Shuffle
+            jb_stream_logo: /local/images/playlist2.png
+            jb_stream: '{ "playlist_name": "Gayles playlist", "shuffle": "1" }'
+            media_content_type: playlist
