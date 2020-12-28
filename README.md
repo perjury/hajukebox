@@ -1,6 +1,8 @@
 # hajukebox
 Contains my Media Player dashboard code
 
+! (hajukebox.jpg)
+
 ## Problem I wanted to solve.
 
 I have a mixture of Google smart speakers and Sonos speakers dotted around the house.
