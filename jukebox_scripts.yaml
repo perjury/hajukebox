@@ -1,0 +1,249 @@
+  set_jb_stream:
+  # set the Jukebox Stream variables
+  # called by jb_stream button - part of Lovelace config
+  # variables:
+  #  - jb_stream
+  #  - jb_stream_name
+  #  - jb_stream_logo
+  #  - media_content_type
+    alias: Set Jukebox Stream variables
+    mode: queued
+    sequence:
+    - service: input_text.set_value
+      data_template:
+        entity_id: input_text.jb_stream
+        value: "{{jb_stream}}"
+    - service: input_text.set_value
+      data_template:
+        entity_id: input_text.jb_stream_name
+        value: "{{jb_stream_name}}"
+    - service: input_text.set_value
+      data_template:
+        entity_id: input_text.jb_stream_logo
+        value: "{{jb_stream_logo}}"
+    - service: input_text.set_value
+      data_template:
+        entity_id: input_text.media_content_type
+        value: "{{media_content_type}}"
+
+  set_jb_speaker:
+  # set the Jukebox Speaker variables
+  # called by jb_stream button - part of Lovelace config
+  # variables:
+  #  - jb_speaker_entity
+  #  - jb_speaker_name
+  #  - jb_speaker_image
+  #  - jb_speaker_switch
+    alias: Set Juke Box Speaker variables
+    mode: queued
+    sequence:
+    - service: input_text.set_value
+      data_template:
+        entity_id: input_text.jb_speaker_entity
+        value: "{{jb_speaker_entity}}"
+    - service: input_text.set_value
+      data_template:
+        entity_id: input_text.jb_speaker_name
+        value: "{{jb_speaker_name}}"
+    - service: input_text.set_value
+      data_template:
+        entity_id: input_text.jb_speaker_image
+        value: "{{jb_speaker_image}}"
+    - service: input_text.set_value
+      data_template:
+        entity_id: input_text.jb_speaker_switch
+        value: "{{jb_speaker_switch}}"        
+        
+  play_media_stream:
+    alias: Play media stream on Selected Media Player
+    # play the media stream identified in input_text.jb_stream
+    # on the media player identified in input_text.jb_speaker_entity
+    mode: restart
+    variables:
+      # The basic stream is stored in input_text.jb_stream
+      # We may need to modify it slightly depending on whether we are playing it
+      # on a Chromecast device or a Sonos speaker and what type of stream it is
+      # If it's an internet address (starts with http) we need to prepend
+      # 'x-rincon-mp3radio://' to get it to play on Sonos
+      # If it's not a URL then it's a Plex stream and we need to prepend it with
+      # plex:// to make it play on a Chromecast device and set the media player service
+      # to plex.play_on_sonos
+      stream_to_play:   "{{ states('input_text.jb_stream') }}"
+      stream_type_http: "{{ stream_to_play|truncate(4,false,'') == 'http'}}"
+      #
+      sonos_service_to_play: "{% if stream_type_http -%}
+                                 media_player.play_media
+                              {%- else -%}
+                                 plex.play_on_sonos
+                              {%- endif -%}"
+      #                        
+      sonos_stream_to_play:  "{% if stream_type_http -%}
+                                 {{states('input_text.jb_sonos_http_prefix')
+                                 + states('input_text.jb_stream')}}
+                              {%- else -%}
+                                 {{states('input_text.jb_stream')}}
+                              {%- endif -%}"
+      #                        
+      cast_stream_to_play:  "{% if stream_type_http -%}
+                                 {{states('input_text.jb_stream')}}
+                              {%- else -%}
+                                 {{states('input_text.jb_cast_plex_prefix') + states('input_text.jb_stream')}}
+                              {%- endif -%}" 
+    sequence:
+    # #### DEBUG ####
+    # - service: script.debug
+      # data:
+        # title: 'PMS'
+        # message: "{{sonos_stream_to_play}} using {{sonos_service_to_play}} {{stream_type_http}} cstp= {{cast_stream_to_play}}"
+    # # ###############    
+    - choose:
+       # first turn on selected speaker - ignore if 'none'
+        - conditions: "{{states('input_text.jb_speaker_switch')!='none'}}"
+          sequence:
+          # #### DEBUG ####
+          # - service: script.debug
+            # data:
+              # title: 'PMS1'
+              # message: "{{states('input_text.jb_speaker_switch')}}"
+          # ###############
+          # set status message          
+          - service: input_text.set_value
+            data:
+              entity_id: input_text.jb_status
+              value: "Waiting for Switch"
+          # call script to turn on the speaker switch
+          - service: script.turn_on_speaker
+            data_template:
+              switch: "{{ states('input_text.jb_speaker_switch') }}"
+          # set status message
+          - service: input_text.set_value
+            data_template:
+              entity_id: input_text.jb_status
+              value: "{{'Waiting for Speaker ' + states('input_text.jb_speaker_name')}}"
+          # wait for the speaker to be available
+          - wait_template: "{{ not is_state(states('input_text.jb_speaker_entity'),'unavailable') }}"
+            timeout: '00:05:00'
+          # set status message
+          - service: input_text.set_value
+            data:
+              entity_id: input_text.jb_status
+              value: "done"
+    # Now we know speaker is available              
+    # Test to see if speaker is in a Sonos group
+    # If not Sonos speaker, then play the 'cast stream' in radio_speaker_id
+    - choose:
+        - conditions: "{{state_attr(states('input_text.jb_speaker_entity'),'sonos_group')== None}}"
+          sequence:
+            - service: script.play_jb_stream
+              data_template:
+                speaker: "{{ states('input_text.jb_speaker_entity') }}"
+                stream:  "{{ cast_stream_to_play }}"
+                content: "{{ states('input_text.media_content_type') }}"
+                service: "media_player.play_media"
+
+    # else add play the 'sonos stream' in radio_speaker_id  
+      default:
+        - service: script.play_jb_stream
+          data_template:
+            speaker: "{{ states('input_text.jb_speaker_entity') }}"
+            stream:  "{{ sonos_stream_to_play }}"
+            content: "{{ states('input_text.media_content_type') }}"
+            service: "{{ sonos_service_to_play }}"
+
+  play_jb_stream:
+    alias: Play Selected music stream 
+    # play content_type stream on speaker using service
+    mode: queued
+    sequence:
+    - service: script.debug
+      data:
+        title: 'PJS'
+        message: "{{service}} {{speaker}} {{stream}} {{content}}"
+    - service: "{{service}}"
+      data_template:
+        entity_id: "{{speaker}}"
+        media_content_id: "{{stream}}"
+        media_content_type: "{{content}}"
+
+  turn_on_speaker:
+    alias: Turn on Speaker
+    mode: queued
+    sequence:
+    # - service: script.debug
+      # data:
+        # title: 'TOS'
+        # message: "{{ not is_state('input_text.jb_speaker_switch', 'none') }}"
+    - condition: template
+      value_template: "{{ not is_state('input_text.jb_speaker_switch', 'none') }}"
+    - service: switch.turn_on
+      data_template:
+        entity_id: "{{states('input_text.jb_speaker_switch')}}"
+    # now check to see if living room sonos or chromecast system, in which case 
+    # turn on AV system to correct activity       
+    - choose:
+        - conditions:    
+            - condition: template
+              value_template: "{{ is_state('input_text.jb_speaker_entity', 'media_player.living_room')}}"
+          sequence: 
+            - service: remote.turn_on
+              entity_id: remote.harmony_hub
+              data:
+                activity: "Listen To Music on Sonos"
+        - conditions:                
+            - condition: template
+              value_template: "{{ is_state('input_text.jb_speaker_entity', 'media_player.living_room_system')}}"
+          sequence: 
+            - service: remote.turn_on
+              entity_id: remote.harmony_hub
+              data:
+                activity: "Listen To Music on Google"
+                
+# SCRIPTS for testing purposes
+##############################
+
+  cast_artist_to_chromecast:
+    alias: Cast Plex artist to Study
+    sequence:
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.study_speaker
+        media_content_type: music
+        media_content_id: 'plex://{ "library_name": "Music", "artist_name": "Santana", "shuffle": "1" }'
+        
+  cast_artist_to_sonos:
+    alias: Cast Plex artist to Study
+    sequence:
+    - service: plex.play_on_sonos
+      data:
+        entity_id: media_player.study
+        media_content_type: music
+        media_content_id: '{ "library_name": "Music", "artist_name": "Santana", "shuffle": "1" }'
+
+  cast_playlist_to_chromecast:
+    alias: Cast Plex playlist to Study
+    sequence:
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.study_speaker
+        media_content_type: PLAYLIST
+        media_content_id: 'plex://{ "playlist_name": "Recently Added", "shuffle": "1" }'      
+        
+  cast_playlist_to_sonos:
+    alias: Cast Plex playlist to Study
+    sequence:
+    - service: plex.play_on_sonos
+      data:
+        entity_id: media_player.study
+        media_content_type: music
+        media_content_id: '{ "library_name": "Music", "playlist_name": "Recently Added", "shuffle": "1" }'
+    
+  test_set_radio_station:
+    alias: test_set_radio_station
+    mode: queued
+    sequence:
+    - service: script.set_radio_station
+      data_template:
+        station_id: http://stream.radioparadise.com/mp3-128
+        station_name: "Radio Paradise"
+        station_logo: paradise.png
+        
