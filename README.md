@@ -1,7 +1,7 @@
 # hajukebox
 Contains my Media Player dashboard code
 
-! (hajukebox.jpg)
+![image](https://github.com/perjury/hajukebox/blob/main/hajukebox.jpg)
 
 ## Problem I wanted to solve.
 
