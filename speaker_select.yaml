@@ -1,0 +1,91 @@
+type: 'custom:button-card'
+template: container
+color: '#EDE7B0'
+name: Speaker Selection
+custom_fields:
+  buttons:
+    card:
+      type: grid
+      columns: 3
+      square: false
+      cards:
+        - type: 'custom:button-card'
+          entity: media_player.living_room
+          template: jb_speaker_button
+          variables:
+            jb_speaker_name: Living Room System
+            jb_speaker_image: /local/images/denonamp.jpg
+            jb_speaker_entity: media_player.living_room_system
+            jb_speaker_switch: switch.tv_system
+        - type: 'custom:button-card'
+          entity: media_player.living_room
+          template: jb_speaker_button
+          variables:
+            jb_speaker_name: Living Room Sonos
+            jb_speaker_image: /local/images/denonamp.jpg
+            jb_speaker_entity: media_player.living_room
+            jb_speaker_switch: switch.tv_system
+        - type: 'custom:button-card'
+          entity: media_player.living_room_display
+          template: jb_speaker_button
+          variables:
+            jb_speaker_name: Living Room Display
+            jb_speaker_image: /local/images/gnesthub.jpg
+            jb_speaker_entity: media_player.living_room_display
+            jb_speaker_switch: none
+        - type: 'custom:button-card'
+          entity: media_player.kitchen_speaker
+          template: jb_speaker_button
+          variables:
+            jb_speaker_name: Kitchen Speaker
+            jb_speaker_image: /local/images/gspeaker.jpg
+            jb_speaker_entity: media_player.kitchen_speaker
+            jb_speaker_switch: none
+        - type: 'custom:button-card'
+          entity: media_player.study
+          template: jb_speaker_button
+          variables:
+            jb_speaker_name: Study Sonos
+            jb_speaker_image: /local/images/sonos1.jpg
+            jb_speaker_entity: media_player.study
+            jb_speaker_switch: switch.plug083
+        - type: 'custom:button-card'
+          entity: media_player.kitchen
+          template: jb_speaker_button
+          variables:
+            jb_speaker_name: Dining Room
+            jb_speaker_image: /local/images/sonos1.jpg
+            jb_speaker_entity: media_player.kitchen
+            jb_speaker_switch: switch.plug087
+        - type: 'custom:button-card'
+          entity: media_player.family_room2
+          template: jb_speaker_button
+          variables:
+            jb_speaker_name: Family Room
+            jb_speaker_image: /local/images/sonos3.jpg
+            jb_speaker_entity: media_player.family_room2
+            jb_speaker_switch: switch.plug091
+        - type: 'custom:button-card'
+          entity: media_player.study_speaker
+          template: jb_speaker_button
+          variables:
+            jb_speaker_name: Study Speaker
+            jb_speaker_image: /local/images/gmini.jpg
+            jb_speaker_entity: media_player.study_speaker
+            jb_speaker_switch: none
+        - type: 'custom:button-card'
+          entity: media_player.master_bedroom_speaker
+          template: jb_speaker_button
+          variables:
+            jb_speaker_name: Bedroom Speaker
+            jb_speaker_image: /local/images/gspeaker.jpg
+            jb_speaker_entity: media_player.master_bedroom_speaker
+            jb_speaker_switch: none
+        - type: 'custom:button-card'
+          entity: media_player.bathroom_speaker
+          template: jb_speaker_button
+          variables:
+            jb_speaker_name: Bathroom Speaker
+            jb_speaker_image: /local/images/gmini.jpg
+            jb_speaker_entity: media_player.bathroom_speaker
+            jb_speaker_switch: none
