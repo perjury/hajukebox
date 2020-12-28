@@ -1,0 +1,143 @@
+  jb_stream_button:
+    variables:
+      jb_stream_name: ''
+      jb_stream: ''
+      jb_stream_logo: ''
+      media_content_type: ''
+    name: '[[[ return variables.jb_stream_name ]]]'
+    show_entity_picture: true
+    entity_picture: '[[[ return variables.jb_stream_logo ]]]'
+    aspect_ratio: 2/1
+    layout: icon_name
+    tap_action:
+      action: call-service
+      service: script.set_jb_stream
+      service_data:
+        jb_stream: '[[[ return variables.jb_stream ]]]'
+        jb_stream_name: '[[[ return variables.jb_stream_name ]]]'
+        jb_stream_logo: '[[[ return variables.jb_stream_logo ]]]'
+        media_content_type: '[[[ return variables.media_content_type ]]]'
+    double_tap_action:
+      action: call-service
+      service: script.play_media_stream
+    show_state: true
+    color_type: card
+    color: white
+    size: 80%
+    hold_action:
+      action: more-info
+    styles:
+      card:
+        - padding: 0.2em
+        - '--mdc-ripple-color': yellow
+        - '--mdc-ripple-press-opacity': 0.5
+        - color: auto
+        - background: |
+            [[[ if (states['input_text.jb_stream_name'].state ==
+                   variables.jb_stream_name)
+                 return 'LightCyan'
+               else
+                 return 'White']]]
+      icon:
+        - opacity: |
+            [[[ if (states['input_text.jb_stream_name'].state ==
+                    variables.jb_stream_name)
+                  return 1 
+                else
+                  return 0.4]]]
+      name:
+        - font-size: 0.65em
+        - white-space: normal
+      state:
+        - font-size: 0.65em
+        - white-space: normal
+      label:
+        - font-size: 0.4em
+        - white-space: normal
+  jb_speaker_button:
+    variables:
+      jb_speaker_name: ''
+      jb_speaker_entity: ''
+      jb_speaker_image: ''
+      jb_speaker_switch: ''
+    name: '[[[ return variables.jb_speaker_name ]]]'
+    show_entity_picture: true
+    entity_picture: '[[[ return variables.jb_speaker_image ]]]'
+    aspect_ratio: 2/1
+    layout: icon_name
+    tap_action:
+      action: call-service
+      service: script.set_jb_speaker
+      service_data:
+        jb_speaker_entity: '[[[ return variables.jb_speaker_entity ]]]'
+        jb_speaker_name: '[[[ return variables.jb_speaker_name ]]]'
+        jb_speaker_image: '[[[ return variables.jb_speaker_image ]]]'
+        jb_speaker_switch: '[[[ return variables.jb_speaker_switch ]]]'
+        speaker_play: false
+    double_tap_action:
+      action: call-service
+      service: script.play_media_stream
+    show_state: false
+    color_type: card
+    color: white
+    size: 80%
+    hold_action:
+      action: more-info
+    styles:
+      grid:
+        - position: relative
+      custom_fields:
+        online_indicator:
+          - color: grey
+          - position: absolute
+          - left: 87%
+          - top: 0%
+          - font-size: 0.55em
+      card:
+        - padding: 0.2em
+        - '--mdc-ripple-color': yellow
+        - '--mdc-ripple-press-opacity': 0.5
+        - color: auto
+        - background: |
+            [[[ if (states['input_text.jb_speaker_name'].state ==
+                   variables.jb_speaker_name)
+                 return 'LightCyan'
+               else
+                 return 'White']]]
+      icon:
+        - opacity: |
+            [[[ if (states['input_text.jb_speaker_name'].state ==
+                    variables.jb_speaker_name)
+                  return 1 
+                else
+                  return 0.4]]]
+      name:
+        - font-size: 0.65em
+        - white-space: normal
+      state:
+        - font-size: 0.65em
+        - white-space: normal
+      label:
+        - font-size: 0.4em
+        - white-space: normal
+    custom_fields:
+      online_indicator: |
+        [[[ 
+            if (variables.jb_speaker_switch != 'none')
+              var switch_availability = states[variables.jb_speaker_switch].state;
+            else
+              var switch_availability = 'unavailable';
+            var availability = entity.state ;
+            if (availability == 'unavailable')
+              if (switch_availability == 'unavailable')
+                return `<ha-icon
+                     icon="mdi:power"
+                     style="width: 20px; height: 20px; ">
+                     </ha-icon>`;
+              else
+                return `<ha-icon
+                     icon="mdi:power"
+                     style="width: 20px; height: 20px; color: green">
+                     </ha-icon>`;
+        ]]]
+              
