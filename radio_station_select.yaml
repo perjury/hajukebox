@@ -1,0 +1,99 @@
+type: 'custom:button-card'
+template: container
+color: '#EDE7B0'
+name: Radio Station Selection
+custom_fields:
+  buttons:
+    card:
+      type: grid
+      columns: 3
+      square: false
+      cards:
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: Radio Paradise Main
+            jb_stream_logo: /local/images/paradise.png
+            jb_stream: 'https://stream.radioparadise.com/aac-320'
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: Radio Paradise Mellow
+            jb_stream_logo: /local/images/paradise.png
+            jb_stream: 'https://stream.radioparadise.com/mellow-320'
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: Radio Paradise Rock
+            jb_stream_logo: /local/images/paradise.png
+            jb_stream: 'https://stream.radioparadise.com/rock-320'
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: Radio Paradise World
+            jb_stream_logo: /local/images/paradise.png
+            jb_stream: 'https://stream.radioparadise.com/world-etc-320'
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: RTVE
+            jb_stream_logo: /local/images/rtve.jpg
+            jb_stream: 'https://rne.rtveradio.cires21.com/rne_hc.mp3'
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_logo: /local/images/times.png
+            jb_stream: 'http://timesradio.wireless.radio/stream?ref=rf'
+            jb_stream_name: Times Radio
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: BBC Radio 2
+            jb_stream_logo: /local/images/bbcr2.png
+            jb_stream: >-
+              http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/llnw/bbc_radio_two.m3u8
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_logo: /local/images/bbcr3.png
+            jb_stream: >-
+              http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/llnw/bbc_radio_three.m3u8   
+            jb_stream_name: BBC Radio 3
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_name: BBC Radio 4
+            jb_stream_logo: /local/images/bbcr4.png
+            jb_stream: >
+              http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/llnw/bbc_radio_fourfm.m3u8
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_logo: /local/images/bbcrberks.png
+            jb_stream: >-
+              http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/llnw/bbc_radio_berkshire.m3u8
+            jb_stream_name: BBC Radio Berks
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_logo: /local/images/classicfm.png
+            jb_stream: 'http://icecast.thisisdax.com/ClassicFM'
+            jb_stream_name: Classic FM
+            media_content_type: music
+        - type: 'custom:button-card'
+          template: jb_stream_button
+          variables:
+            jb_stream_logo: /local/images/jazzfm.jpg
+            jb_stream: 'http://edge-baueral-06-gos2.sharp-stream.com/jazzfmmobile.mp3'
+            jb_stream_name: Jazz FM
+            media_content_type: music
